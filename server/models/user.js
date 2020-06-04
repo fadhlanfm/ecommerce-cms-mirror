@@ -1,53 +1,48 @@
 'use strict';
-const { generateHashedPassword } = require('../helpers/crypt')
-
+const { hash } = require('../helpers/bcrypt');
 module.exports = (sequelize, DataTypes) => {
-  const Sequelize = sequelize.Sequelize
-  const Model = Sequelize.Model
-
-  class User extends Model {}
-
-  User.init({
+  const User = sequelize.define('User', {
     email: {
       type: DataTypes.STRING,
-      allowNull: {
-        args: false,
-        msg: `Email can not be null`
-      },
-      validate: {
-        isEmail: {
-          msg: `Please enter the correct email address`
-        },
-        notEmpty: {
-          args: true,
-          msg: `Please enter your email`
+        allowNull: false,
+        unique: true,
+        validate: {
+          notEmpty: {
+            args: true,
+            msg: 'Email cannot be empty'
+          }
         }
-      },
-      unique: {
-        args: true,
-        msg: `Email is already in use. Please use another email`
-      }
     },
     password: {
       type: DataTypes.STRING,
-      allowNull: {
-        args: false,
-        msg: `Password can not be null`
-      },
-      validate: {
-        notEmpty: {
-          args: true,
-          msg: `Please enter your password`
+        allowNull: false,
+        validate: {
+          notEmpty: {
+            args: true,
+            msg: 'Password cannot be empty'
+          }
         }
+    },
+    role: {
+      type: DataTypes.STRING,
+        allowNull: false,
+        validate: {
+          isIn: {
+            args: [['User', 'Admin']],
+            msg: 'Role must be User or Admin'
+          }
+        }
+    }
+  }, {
+    hooks: {
+      beforeCreate: (instance, options) => {
+        return hash(instance.password)
+          .then(hashed => {
+            instance.password = hashed;
+          });
       }
     }
-  }, { sequelize })
-
-  User.beforeCreate((user, option) => {
-    user.password = generateHashedPassword(user.password)
-    user.organization = 'Hacktiv8'
-  })
-  
+  });
   User.associate = function(models) {
     // associations can be defined here
   };

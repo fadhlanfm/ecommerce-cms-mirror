@@ -1,8 +1,15 @@
 'use strict';
-module.exports = (sequelize, DataTypes) => {
-  const Product = sequelize.define('Product', {
-    name: {
-      type: DataTypes.STRING,
+module.exports = {
+  up: (queryInterface, Sequelize) => {
+    return queryInterface.createTable('Products', {
+      id: {
+        allowNull: false,
+        autoIncrement: true,
+        primaryKey: true,
+        type: Sequelize.INTEGER
+      },
+      name: {
+        type: Sequelize.STRING,
         allowNull: false,
         validate: {
           notEmpty: {
@@ -10,10 +17,12 @@ module.exports = (sequelize, DataTypes) => {
             msg: 'Name cannot be empty'
           }
         }
-    },
-    image_url: DataTypes.STRING,
-    price: {
-      type: DataTypes.STRING,
+      },
+      image_url: {
+        type: Sequelize.STRING
+      },
+      price: {
+        type: Sequelize.INTEGER,
         allowNull: false,
         validate: {
           notEmpty: {
@@ -29,9 +38,9 @@ module.exports = (sequelize, DataTypes) => {
             msg: 'Price must be a number'
           }
         }
-    },
-    stock: {
-      type: DataTypes.INTEGER,
+      },
+      stock: {
+        type: Sequelize.INTEGER,
         allowNull: false,
         validate: {
           notEmpty: {
@@ -47,10 +56,18 @@ module.exports = (sequelize, DataTypes) => {
             msg: 'Stock must be a number'
           }
         }
-    }
-  }, {});
-  Product.associate = function(models) {
-    // associations can be defined here
-  };
-  return Product;
+      },
+      createdAt: {
+        allowNull: false,
+        type: Sequelize.DATE
+      },
+      updatedAt: {
+        allowNull: false,
+        type: Sequelize.DATE
+      }
+    });
+  },
+  down: (queryInterface, Sequelize) => {
+    return queryInterface.dropTable('Products');
+  }
 };

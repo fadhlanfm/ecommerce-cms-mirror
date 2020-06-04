@@ -1,26 +1,29 @@
 {
-  "name": "testing-mcc",
+  "name": "e-commerce-cms",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
   "scripts": {
-    "dev": "set NODE_ENV=development&& nodemon ./bin/http.js",
-    "test": "set NODE_ENV=test&& jest --detectOpenHandles"
+    "start": "node app.js",
+    "test": "set NODE_ENV=test&& jest --detectOpenHandles --forceExit",
+    "dev": "set NODE_ENV=development&& nodemon app.js"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "dependencies": {
     "bcrypt": "^4.0.1",
+    "cors": "^2.8.5",
+    "dotenv": "^8.2.0",
     "express": "^4.17.1",
+    "http-errors": "^1.7.3",
     "jsonwebtoken": "^8.5.1",
-    "pg": "^8.2.0",
-    "sequelize": "^5.21.9",
+    "pg": "^7.18.2",
+    "sequelize": "^5.21.5",
     "sequelize-cli": "^5.5.1"
   },
   "devDependencies": {
-    "dotenv": "^8.2.0",
-    "jest": "^26.0.1",
+    "jest": "^25.1.0",
     "supertest": "^4.0.2"
   }
 }
